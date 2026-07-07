@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { AiFillEye, AiFillGithub } from 'react-icons/ai';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 import { AppWrap, MotionWrap } from '../../wrapper';
-import { urlFor, client } from '../../client';
+import CaseStudyModal from '../../components/CaseStudyModal/CaseStudyModal';
+import OptimizedImage from '../../components/OptimizedImage';
+import { client, getWorkImageSrc } from '../../client';
+import { portfolioProjects } from '../../data/cvData';
+import { enrichWorkWithCaseStudy, normalizeWorks } from '../../utils/projectUtils';
 import './Work.scss';
 
 const Work = () => {
@@ -11,14 +15,21 @@ const Work = () => {
   const [filterWork, setFilterWork] = useState([]);
   const [activeFilter, setActiveFilter] = useState('All');
   const [animateCard, setAnimateCard] = useState({ y: 0, opacity: 1 });
+  const [selectedProject, setSelectedProject] = useState(null);
 
   useEffect(() => {
     const query = '*[_type == "works"]';
 
-    client.fetch(query).then((data) => {
-      setWorks(data);
-      setFilterWork(data);
-    });
+    client.fetch(query)
+      .then((data) => {
+        const items = normalizeWorks(data);
+        setWorks(items);
+        setFilterWork(items);
+      })
+      .catch(() => {
+        setWorks(portfolioProjects);
+        setFilterWork(portfolioProjects);
+      });
   }, []);
 
   const handleWorkFilter = (item) => {
@@ -34,6 +45,10 @@ const Work = () => {
         setFilterWork(works.filter((work) => work.tags.includes(item)));
       }
     }, 500);
+  };
+
+  const openCaseStudy = (work, index) => {
+    setSelectedProject(enrichWorkWithCaseStudy(work, index));
   };
 
   return (
@@ -57,53 +72,101 @@ const Work = () => {
         transition={{ duration: 0.5, delayChildren: 0.5 }}
         className="app__work-portfolio"
       >
-        {filterWork.map((work, index) => (
-          <div className="app__work-item app__flex" key={index}>
-            <div
-              className="app__work-img app__flex"
-            >
-              <img src={urlFor(work.imgUrl)} alt={work.name} />
+        {filterWork.map((work, index) => {
+          const imageSrc = getWorkImageSrc(work);
+          const liveLink = work.projectLink;
+          const repoLink = work.github || work.codeLink;
 
-              <motion.div
-                whileHover={{ opacity: [0, 1] }}
-                transition={{ duration: 0.25, ease: 'easeInOut', staggerChildren: 0.5 }}
-                className="app__work-hover app__flex"
-              >
-                <a href={work.projectLink} target="_blank" rel="noreferrer">
+          return (
+            <div className="app__work-item" key={work._id || work.slug || work.name || index}>
+              <div className="app__work-img">
+                <div className="app__work-img-media">
+                  {imageSrc ? (
+                    <OptimizedImage
+                      src={imageSrc}
+                      alt={work.name}
+                      fill
+                      sizes="(max-width: 768px) 90vw, 270px"
+                    />
+                  ) : (
+                    <div className="app__work-img-placeholder app__flex">
+                      <span>{work.name?.charAt(0) || 'P'}</span>
+                    </div>
+                  )}
+                </div>
 
-                  <motion.div
-                    whileInView={{ scale: [0, 1] }}
-                    whileHover={{ scale: [1, 0.90] }}
-                    transition={{ duration: 0.25 }}
-                    className="app__flex"
-                  >
-                    <AiFillEye />
-                  </motion.div>
-                </a>
-                <a href={work.codeLink} target="_blank" rel="noreferrer">
-                  <motion.div
-                    whileInView={{ scale: [0, 1] }}
-                    whileHover={{ scale: [1, 0.90] }}
-                    transition={{ duration: 0.25 }}
-                    className="app__flex"
-                  >
-                    <AiFillGithub />
-                  </motion.div>
-                </a>
-              </motion.div>
-            </div>
+                <div className="app__work-hover app__flex">
+                  {liveLink ? (
+                    <a
+                      href={liveLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      aria-label={`Visit ${work.name} live site`}
+                    >
+                      <div className="app__work-hover-icon app__flex">
+                        <AiFillEye />
+                      </div>
+                    </a>
+                  ) : (
+                    <button
+                      type="button"
+                      aria-label={`View case study for ${work.name}`}
+                      onClick={() => openCaseStudy(work, index)}
+                    >
+                      <div className="app__work-hover-icon app__flex">
+                        <AiFillEye />
+                      </div>
+                    </button>
+                  )}
+                  {repoLink && (
+                    <a href={repoLink} target="_blank" rel="noreferrer" aria-label={`View ${work.name} on GitHub`}>
+                      <div className="app__work-hover-icon app__flex">
+                        <AiFillGithub />
+                      </div>
+                    </a>
+                  )}
+                </div>
+              </div>
 
-            <div className="app__work-content app__flex">
-              <h4 className="bold-text">{work.title}</h4>
-              <p className="p-text" style={{ marginTop: 10 }}>{work.description}</p>
+              <div className="app__work-content">
+                <h4 className="bold-text">
+                  {liveLink ? (
+                    <a
+                      href={liveLink}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="app__work-title-link"
+                    >
+                      {work.name || work.title}
+                    </a>
+                  ) : (
+                    work.name || work.title
+                  )}
+                </h4>
+                <p className="p-text app__work-desc">{work.description}</p>
 
-              <div className="app__work-tag app__flex">
-                <p className="p-text">{work.tags[0]}</p>
+                <button
+                  type="button"
+                  className="app__work-case-link p-text"
+                  onClick={() => openCaseStudy(work, index)}
+                >
+                  Read case study →
+                </button>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </motion.div>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <CaseStudyModal
+            key={selectedProject.slug || selectedProject.name}
+            project={selectedProject}
+            onClose={() => setSelectedProject(null)}
+          />
+        )}
+      </AnimatePresence>
     </>
   );
 };
@@ -111,5 +174,5 @@ const Work = () => {
 export default AppWrap(
   MotionWrap(Work, 'app__works'),
   'work',
-  'app__primarybg',
+  'app__section-white',
 );
