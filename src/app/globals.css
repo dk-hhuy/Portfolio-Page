@@ -1,0 +1,107 @@
+:root {
+  /* CV-inspired palette */
+  --cv-brown: #4a3428;
+  --cv-brown-dark: #3d2a1f;
+  --section-white: #ffffff;
+  --section-alt: #f6f1ec;
+
+  --primary-color: var(--section-alt);
+  --secondary-color: var(--cv-brown);
+  --black-color: #030303;
+  --lightGray-color: #e4e4e4;
+  --gray-color: #6b7688;
+  --brown-color: var(--cv-brown);
+  --white-color: var(--section-white);
+
+  --nav-color: var(--cv-brown);
+  --accent-color: var(--cv-brown);
+  --accent-gold: #8b6914;
+  --accent-year: var(--cv-brown);
+  --cream-color: var(--section-white);
+  --teal-start: var(--section-alt);
+  --teal-end: var(--section-alt);
+
+  --card-bg: var(--section-white);
+  --hero-badge-text: var(--black-color);
+  --section-border: #e8e0d8;
+  --shadow-soft: rgba(74, 52, 40, 0.1);
+
+  /* Section heading accent — brown → gold gradient */
+  --heading-accent-gradient: linear-gradient(
+    120deg,
+    #4a3428 0%,
+    #6b4f2e 38%,
+    #8b6914 72%,
+    #a67c32 100%
+  );
+  --heading-underline-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(74, 52, 40, 0.15) 15%,
+    #4a3428 35%,
+    #8b6914 65%,
+    rgba(139, 105, 20, 0.15) 85%,
+    transparent 100%
+  );
+}
+
+[data-theme="dark"] {
+  --cv-brown: #c4a882;
+  --cv-brown-dark: #a68b6a;
+  --section-white: #1c1a18;
+  --section-alt: #262220;
+
+  --primary-color: var(--section-alt);
+  --secondary-color: var(--cv-brown);
+  --black-color: #f0ebe6;
+  --lightGray-color: #3a3532;
+  --gray-color: #b0a8a0;
+  --brown-color: var(--cv-brown);
+  --white-color: var(--section-white);
+
+  --nav-color: var(--cv-brown);
+  --accent-color: var(--cv-brown);
+  --accent-gold: #c4a882;
+  --accent-year: var(--cv-brown);
+  --cream-color: var(--section-white);
+  --teal-start: var(--section-alt);
+  --teal-end: var(--section-alt);
+
+  --card-bg: #2e2a28;
+  --hero-badge-text: var(--black-color);
+  --section-border: rgba(255, 255, 255, 0.1);
+  --shadow-soft: rgba(0, 0, 0, 0.35);
+
+  --heading-accent-gradient: linear-gradient(
+    120deg,
+    #c4a882 0%,
+    #d4bc96 42%,
+    #e0cfa8 78%,
+    #f0e4cc 100%
+  );
+  --heading-underline-gradient: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(196, 168, 130, 0.12) 15%,
+    #c4a882 35%,
+    #e0cfa8 65%,
+    rgba(224, 207, 168, 0.12) 85%,
+    transparent 100%
+  );
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+html {
+  scroll-padding-top: 83px;
+}
+
+body {
+  font-family: var(--font-base), "DM Sans", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
