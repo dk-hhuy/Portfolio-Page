@@ -1,5 +1,11 @@
 import { images } from '../constants';
 
+import chatgptIcon from '../assets/ai/chatgpt.svg';
+import claudeIcon from '../assets/ai/claude.svg';
+import copilotIcon from '../assets/ai/copilot.svg';
+import cursorIcon from '../assets/ai/cursor.svg';
+import midjourneyIcon from '../assets/ai/midjourney.svg';
+
 /** Portfolio content aligned with Hoang Huy Le's CV */
 export const profile = {
   firstName: 'Hoang Huy',
@@ -87,6 +93,51 @@ export const skills = [
   { name: 'Git', icon: images.git, bgColor: '#fef4f5', level: 85 },
   { name: 'AWS', icon: images.aws, bgColor: '#fff8f0', level: 82 },
   { name: 'Cloud', icon: images.cloud, bgColor: '#f0f6fc', level: 80 },
+];
+
+export const aiToolsHeadline = 'Proficient with modern AI tools that accelerate design, coding, and delivery.';
+
+export const aiTools = [
+  {
+    name: 'Cursor',
+    level: 95,
+    bgColor: '#f4f4f5',
+    category: 'AI-native IDE',
+    description: 'Daily agentic coding, multi-file refactors, debugging, and shipping features with AI pair programming.',
+    icon: cursorIcon,
+  },
+  {
+    name: 'ChatGPT',
+    level: 92,
+    bgColor: '#ecfdf5',
+    category: 'LLM assistant',
+    description: 'Architecture brainstorming, documentation, API design, and rapid prototyping across the stack.',
+    icon: chatgptIcon,
+  },
+  {
+    name: 'Claude',
+    level: 90,
+    bgColor: '#fff5f0',
+    category: 'LLM assistant',
+    description: 'Long-context reasoning, code review, technical writing, and structured problem solving.',
+    icon: claudeIcon,
+  },
+  {
+    name: 'GitHub Copilot',
+    level: 88,
+    bgColor: '#eff6ff',
+    category: 'Code completion',
+    description: 'Inline suggestions, test generation, and faster implementation inside VS Code workflows.',
+    icon: copilotIcon,
+  },
+  {
+    name: 'Midjourney',
+    level: 85,
+    bgColor: '#f5f3ff',
+    category: 'Image generation',
+    description: 'Marketing visuals, UI mood boards, hero imagery, and creative assets for web projects.',
+    icon: midjourneyIcon,
+  },
 ];
 
 export const experiences = [

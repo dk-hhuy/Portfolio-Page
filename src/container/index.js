@@ -1,4 +1,5 @@
 export { default as About } from './About/About';
+export { default as AiTools } from './AiTools/AiTools';
 export { default as Education } from './Education/Education';
 export { default as Footer } from './Footer/Footer';
 export { default as Header } from './Header/Header';

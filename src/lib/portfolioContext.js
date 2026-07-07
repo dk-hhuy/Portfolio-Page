@@ -1,5 +1,6 @@
 import {
   aboutCards,
+  aiTools,
   careerObjective,
   certificates,
   education,
@@ -20,6 +21,7 @@ function formatList(items) {
  */
 export function buildPortfolioContext() {
   const skillLines = skills.map((s) => `${s.name} (${s.level}%)`).join(', ');
+  const aiToolLines = aiTools.map((t) => `${t.name} (${t.level}%) — ${t.category}: ${t.description}`).join('\n');
 
   const experienceBlocks = experiences.map((exp) => {
     const bullets = formatList(exp.bullets || []);
@@ -80,6 +82,9 @@ ${heroStatsBlock}
 
 ## Skills
 ${skillLines}
+
+## AI Tools Proficiency
+${aiToolLines}
 
 ## Work Experience
 ${experienceBlocks}

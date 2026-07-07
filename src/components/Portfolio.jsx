@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-import { About, Footer, Header, Skills } from '../container';
+import { About, AiTools, Footer, Header, Skills } from '../container';
 import { ChatAssistant, Navbar, PageChrome, ScrollProgress } from './index';
 
 const Work = dynamic(() => import('../container/Work/Work'));
@@ -20,6 +20,7 @@ export default function Portfolio() {
       <About />
       <Work />
       <Skills />
+      <AiTools />
       <Testimonial />
       <Education />
       <Footer />
