@@ -1,47 +1,71 @@
 import React, { useState } from 'react';
 import { HiMenuAlt4, HiX } from 'react-icons/hi';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-import { images } from '../../constants';
+import { profile } from '../../data/cvData';
+import { getNavLabel, NAV_SECTIONS } from '../../constants/navigation';
+import { useActiveSection } from '../../hooks/useActiveSection';
+import ThemeToggle from '../ThemeToggle/ThemeToggle';
 import './Navbar.scss';
 
 const Navbar = () => {
   const [toggle, setToggle] = useState(false);
+  const activeSection = useActiveSection(NAV_SECTIONS);
+
+  const linkClass = (item) => (activeSection === item ? 'app__navbar-link--active' : '');
 
   return (
     <nav className="app__navbar">
-      <div className="app__navbar-logo">
-        <img src={images.logo} alt="logo" />
-      </div>
+      <a href="#home" className="app__navbar-brand">
+        {profile.displayName}
+      </a>
       <ul className="app__navbar-links">
-        {['home', 'about', 'work', 'skills', 'contact'].map((item) => (
-          <li className="app__flex p-text" key={`link-${item}`}>
+        {NAV_SECTIONS.map((item) => (
+          <li
+            className={`app__flex p-text ${linkClass(item)}`.trim()}
+            key={`link-${item}`}
+          >
             <div />
-            <a href={`#${item}`}>{item}</a>
+            <a href={`#${item}`}>{getNavLabel(item)}</a>
           </li>
         ))}
       </ul>
 
-      <div className="app__navbar-menu">
-        <HiMenuAlt4 onClick={() => setToggle(true)} />
+      <div className="app__navbar-actions app__flex">
+        <ThemeToggle />
+        <div className="app__navbar-menu">
+          <button type="button" className="app__navbar-menu-btn" aria-label="Open menu" onClick={() => setToggle(true)}>
+            <HiMenuAlt4 />
+          </button>
 
-        {toggle && (
-          <motion.div
-            whileInView={{ x: [300, 0] }}
-            transition={{ duration: 0.85, ease: 'easeOut' }}
-          >
-            <HiX onClick={() => setToggle(false)} />
-            <ul>
-              {['home', 'about', 'work', 'skills', 'contact'].map((item) => (
-                <li key={item}>
-                  <a href={`#${item}`} onClick={() => setToggle(false)}>
-                    {item}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </motion.div>
-        )}
+          <AnimatePresence>
+            {toggle && (
+              <motion.div
+                className="app__navbar-mobile"
+                initial={{ x: '100%' }}
+                animate={{ x: 0 }}
+                exit={{ x: '100%' }}
+                transition={{ duration: 0.35, ease: 'easeOut' }}
+              >
+                <div className="app__navbar-mobile-header app__flex">
+                  <ThemeToggle />
+                  <button type="button" aria-label="Close menu" onClick={() => setToggle(false)}>
+                    <HiX />
+                  </button>
+                </div>
+                <ul>
+                  {NAV_SECTIONS.map((item) => (
+                    <li key={item} className={linkClass(item)}>
+                      <a href={`#${item}`} onClick={() => setToggle(false)}>
+                        {getNavLabel(item)}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
     </nav>
   );
