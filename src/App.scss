@@ -1,22 +1,25 @@
 .app {
-  background-color: var(--primary-color);
+  background-color: var(--section-white);
   font-family: var(--font-base);
+  transition: background-color 0.35s ease, color 0.35s ease;
 }
 
-.app__whitebg {
-  background-color: var(--white-color);
+/* Alternating section backgrounds — white / warm cream (CV style) */
+.app__section-white,
+.app__whitebg,
+.app__creambg {
+  background-color: var(--section-white);
 }
 
-.app__primarybg {
-  background-color: var(--primary-color);
+.app__section-alt,
+.app__primarybg,
+.app__tealbg {
+  background-color: var(--section-alt);
 }
 
 .app__container {
   width: 100%;
   min-height: 100vh;
-
-  display: flex;
-  flex-direction: row;
 }
 
 .app__flex {
@@ -31,35 +34,117 @@
   flex-direction: column;
   padding: 4rem 2rem;
 
+  @media screen and (min-width: 501px) {
+    /* Preserve inset where fixed social / nav dots used to sit in the flex row */
+    padding-left: 5.5rem;
+    padding-right: 4.5rem;
+  }
+
   @media screen and (max-width: 450px) {
     padding: 4rem 1rem 2rem;
   }
 }
 
-.copyright {
-  width: 100%;
-  padding: 2rem 0 0;
+.app__page-chrome {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+}
 
+.copyright {
+  position: fixed;
+  right: 1.5rem;
+  bottom: 1.25rem;
+  z-index: 50;
+  pointer-events: none;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
   align-items: flex-end;
+  gap: 0.2rem;
+  padding: 0.72rem 1rem 0.72rem 1.2rem;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--section-border);
+  box-shadow:
+    0 4px 22px rgba(74, 52, 40, 0.08),
+    0 1px 4px rgba(74, 52, 40, 0.04);
+  overflow: hidden;
 
-  p {
+  &__accent {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(
+      180deg,
+      var(--secondary-color) 0%,
+      var(--accent-gold) 100%
+    );
+  }
+
+  &__brand {
+    margin: 0;
+    font-family: var(--font-display), "Sora", sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    line-height: 1.2;
+    background: var(--heading-accent-gradient);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+  }
+
+  &__meta {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin: 0;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: var(--black-color);
+    color: var(--gray-color);
+    white-space: nowrap;
+  }
+
+  &__sep {
+    opacity: 0.4;
+    font-size: 0.75rem;
+    line-height: 1;
   }
 }
 
+[data-theme='dark'] .copyright {
+  background: rgba(38, 34, 32, 0.88);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.38);
+}
+
 .head-text {
+  position: relative;
+  font-family: var(--font-display), "Sora", sans-serif;
   font-size: 2.75rem;
   font-weight: 800;
   text-align: center;
   color: var(--black-color);
   text-transform: capitalize;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
 
-  span {
-    color: var(--secondary-color);
+  &::after {
+    content: '';
+    display: block;
+    width: min(72px, 18%);
+    height: 3px;
+    margin: 1rem auto 0;
+    border-radius: 999px;
+    background: var(--heading-underline-gradient);
   }
 
   @media screen and (min-width: 2000px) {
@@ -69,6 +154,17 @@
   @media screen and (max-width: 450px) {
     font-size: 2rem;
   }
+}
+
+/* Shared accent for section titles — gradient keyword highlight */
+.head-text span,
+.brand-showcase__title span,
+.review-form-section__title span {
+  background: var(--heading-accent-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
 }
 
 .p-text {
@@ -97,27 +193,82 @@
   }
 }
 
+.app__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.85rem;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+
+  &--primary {
+    background: var(--secondary-color);
+    color: var(--white-color);
+
+    &:hover {
+      background: var(--brown-color);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+  }
+
+  &--outline {
+    background: transparent;
+    color: var(--secondary-color);
+    border: 2px solid var(--secondary-color);
+
+    &:hover {
+      background: var(--secondary-color);
+      color: var(--white-color);
+      transform: translateY(-2px);
+    }
+  }
+
+  &--ghost {
+    background: var(--white-color);
+    color: var(--black-color);
+    border: 2px solid var(--lightGray-color);
+
+    &:hover {
+      background: var(--primary-color);
+      transform: translateY(-2px);
+    }
+  }
+}
+
 .app__social {
+  position: fixed;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  pointer-events: auto;
   display: flex;
   justify-content: flex-end;
   align-items: center;
   flex-direction: column;
+  padding: 0;
 
-  padding: 1rem;
-
-  div {
+  div,
+  a {
     width: 40px;
     height: 40px;
     border-radius: 50%;
     background-color: var(--white-color);
     margin: 0.25rem 0;
     border: 1px solid var(--lightGray-color);
-
     display: flex;
     justify-content: center;
     align-items: center;
-
     transition: all 0.3s ease-in-out;
+    text-decoration: none;
 
     svg {
       width: 15px;
@@ -128,6 +279,7 @@
     &:hover {
       background-color: var(--secondary-color);
       border-color: var(--secondary-color);
+      transform: scale(1.1);
 
       svg {
         color: var(--white-color);
@@ -137,7 +289,6 @@
     @media screen and (min-width: 2000px) {
       width: 70px;
       height: 70px;
-
       margin: 0.5rem 0;
 
       svg {
@@ -149,11 +300,16 @@
 }
 
 .app__navigation {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  pointer-events: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-
   padding: 1rem;
 
   .app__navigation-dot {
@@ -162,11 +318,20 @@
     border-radius: 50%;
     background-color: #cbcbcb;
     margin: 0.5rem;
-
-    transition: background-color 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
 
     &:hover {
       background-color: var(--secondary-color);
+      transform: scale(1.2);
+    }
+
+    &--active {
+      background: linear-gradient(
+        135deg,
+        var(--secondary-color) 0%,
+        var(--accent-gold) 100%
+      );
+      transform: scale(1.15);
     }
 
     @media screen and (min-width: 2000px) {
@@ -177,12 +342,37 @@
 }
 
 @media screen and (max-width: 500px) {
-  .app__navigation,
-  .app__social {
+  .app__navigation {
     display: none;
   }
 
+  .app__social {
+    left: 0.75rem;
+    top: auto;
+    bottom: 5.5rem;
+    transform: none;
+    flex-direction: row;
+    gap: 0.35rem;
+
+    div,
+    a {
+      margin: 0;
+    }
+  }
+
   .copyright {
-    padding: 2rem;
+    right: 1rem;
+    bottom: 1rem;
+    padding: 0.6rem 0.85rem 0.6rem 1rem;
+    border-radius: 12px;
+
+    &__brand {
+      font-size: 0.78rem;
+    }
+
+    &__meta {
+      font-size: 0.58rem;
+      letter-spacing: 0.08em;
+    }
   }
 }
